@@ -35,8 +35,11 @@ chrome.contextMenus.create({
     title: '运行函数',
     id: '1'
     , onclick: function () {
-        sendMessageToContentScript({ cmd: 'provider', value: '你好，我是爸爸！', mode }, function (response) {
-            console.log('来自content的回复：' + response);
+        chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+            chrome.tabs.sendMessage(
+                tabs[0].id,
+                { cmd: 'provider', value: '你好，我是爸爸！', mode },
+            );
         });
     }
 });
@@ -142,11 +145,11 @@ chrome.runtime.onConnect.addListener(function (port) {
                     }
                     if (window.confirm(`确定要上传${items2.current.school.school_name}-${items2.current.eas}的适配项目吗`)) {
                         post(url + '/api/files', {
-                            \"url\": items2.current.url,
-                            \"school_name\": items2.current.school.school_name,
+                            "url": items2.current.url,
+                            "school_name": items2.current.school.school_name,
                             eas: items2.current.eas,
-                            \"provider_html\": items2.current.provider_html,
-                            \"parser\": items2.current.parser,
+                            "provider_html": items2.current.provider_html,
+                            "parser": items2.current.parser,
                             status: mode == 'else' ? 1 : 0, isvalid: 0,
                             html: items1.html,
                             score: mode == 'else' ? 1024 : 0
@@ -154,7 +157,7 @@ chrome.runtime.onConnect.addListener(function (port) {
 
                             if (result.code == 0) {
                                 alert('上传成功')
-                                console.log(\"%c 上传成功\", \"color:green;font-size:38px;\");
+                                console.log("%c 上传成功", "color:green;font-size:38px;");
 
                             } else if (result.code == 400) {
                                 alert('您未在白名单中')
