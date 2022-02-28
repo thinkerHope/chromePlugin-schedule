@@ -1,11 +1,11 @@
 chrome.storage.local.clear(function(aaa){console.log(aaa)})
 var port = chrome.runtime.connect({ name: 'devtools' });
 let mode = 'self'
-//定义一个全局变量来储存模式
-//切换按钮 点击事件：清空本次缓存, fetch新数据,更改provider文案
-//选中详情按钮 点击事件 ：填充html到provider ，  暂存html到缓存
-//点击provider区域  弹出html    点击parser 跳到sources
-//点击运行，直接执行parser
+// 定义一个全局变量来储存模式
+// 切换按钮 点击事件：清空本次缓存, fetch新数据,更改provider文案
+// 选中详情按钮 点击事件：填充html到provider，暂存html到缓存
+// 点击provider区域  弹出html    点击parser 跳到sources
+// 点击运行，直接执行parser
 
 $('#mode span').on('click', function () {
     if (mode == 'self') {
@@ -16,7 +16,6 @@ $('#mode span').on('click', function () {
             name: 'mode',
             mode: 'else',
             tabId: chrome.devtools.inspectedWindow.tabId,
-
         });
     } else {
         $('#mode span').text('本校模式')
@@ -231,7 +230,7 @@ port.onMessage.addListener((message) => {
     }
 })
 
-//事件监听
+// 事件监听
 document.getElementById('login').addEventListener('click', function () {
     // 往后台页面发送消息
     port.postMessage({
@@ -352,7 +351,7 @@ $('#pre').on('click', function (a) {
     if (window.getSelection().type == 'Range') {
         return
     }
-    //找到resources中的两个文件，找到存储中的两个函数，替换掉
+    // 找到resources中的两个文件，找到存储中的两个函数，替换掉
     chrome.storage.local.get({ current: '' }, function (items) {
         chrome.devtools.inspectedWindow.getResources(function (Resources) {
             for (let resource of Resources) {
@@ -376,10 +375,8 @@ $('#pre').on('click', function (a) {
                 })
 
             } else {
-
                 if ($('#parser').css('border-bottom') == '3px solid rgb(37, 159, 255)') {
                     // if ($('#parser').css('border-bottom-style') == 'solid') {
-
                     chrome.devtools.panels.openResource(chrome.runtime.getURL('/js/scheduleHtmlProvider.js'), 1, function (aaa) { })
                     // chrome.devtools.panels.openResource(chrome.runtime.getURL('/js/schoolUrl.js'), 1, function (aaa) { console.log(aaa) })
                     chrome.devtools.panels.openResource(chrome.runtime.getURL('/js/scheduleHtmlParser.js'), 1, function (aaa) { })
@@ -387,14 +384,10 @@ $('#pre').on('click', function (a) {
                     chrome.devtools.panels.openResource(chrome.runtime.getURL('/js/scheduleHtmlParser.js'), 1, function (aaa) { })
                     // chrome.devtools.panels.openResource(chrome.runtime.getURL('/js/schoolUrl.js'), 1, function (aaa) { console.log(aaa) })
                     chrome.devtools.panels.openResource(chrome.runtime.getURL('/js/scheduleHtmlProvider.js'), 1, function (aaa) { })
-
                 }
             }
         })
     });
-
-
-
 });
 
 //开发者点击ctrl+s之后，替换掉对应学校本地存储中的代码
@@ -759,19 +752,14 @@ function refreshCurrent(id) {
 
     chrome.storage.local.get({ current: '' }, function (items) {
         chrome.storage.local.get({ html: '' }, function (html) {
-
             if (mode == 'self') {
-
                 $('#pre').text(items.current.provider_html ? items.current.provider_html : '')
             } else {
                 if (id != '本地') {
-
                     $('#pre').html(html.html)
                 } else {
                     $('#pre').html(items.current.html)
-
                 }
-
             }
             $('#version').html('版本号：' + (items.current.id ? items.current.id : '本地') + '&nbsp;&nbsp;&nbsp;')
             $('#date').text('日期：' + (items.current ? new Date(items.current.updatedAt).getFullYear() : new Date().getFullYear()) + '/' + ((items.current ? new Date(items.current.updatedAt).getMonth() + 1 : new Date().getMonth() + 1)) + '/' + (items.current ? new Date(items.current.updatedAt).getDate() : new Date().getDate()))
